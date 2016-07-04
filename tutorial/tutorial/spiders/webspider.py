@@ -6,7 +6,7 @@ class FoodPlusSpider(scrapy.Spider):
     name = "foodplus"                                #spider to scrape foodplus.co.ke
     allowed_domains = ["foodplus.co.ke"]
 
-def __init__(self,item = 'eggs', *args, **kwargs):              #initialize spider with item to be searched
+    def __init__(self,item = 'eggs', *args, **kwargs):              #initialize spider with item to be searched
         super(FoodPlusSpider,self).__init__(*args,**kwargs)
         self.start_urls = ['https://www.foodplus.co.ke/catalogsearch/result/?q=%s' % item]
         

@@ -7,7 +7,7 @@ app = Flask(__name__)
 process = CrawlerProcess(get_project_settings())          #creating a process to call a spider with needed setting
 #In settings.py, the JsonWriterPipeline has been activated by commenting out the required lines in settings.py
 
-@app.route('/hello')                                  #rule to test if spider is working
+@app.route('/foodplus')                                  #rule to test if spider is working
 def hello_world():
     
     process.crawl('foodplus', item = 'bread')       #schedulespider named foosplus and search for the item bread
