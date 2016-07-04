@@ -1,0 +1,19 @@
+import scrapy
+
+#from tutorial.items import DmozItem
+
+class FoodPlusSpider(scrapy.Spider):
+    name = "foodplus"
+    allowed_domains = ["foodplus.co.ke"]
+
+    def __init__(self,item = 'eggs', *args, **kwargs):
+        super(FoodPlusSpider,self).__init__(*args,**kwargs)
+        self.start_urls = ['https://www.foodplus.co.ke/catalogsearch/result/?q=%s' % item]
+        
+    def parse(self, response):
+        for sel in response.xpath('//div[@class="name-price"]'):
+            productName = sel.xpath('h2[@class="product-name"]/a/text()').extract()
+            price  = sel.xpath('div[@class="price-box"]/span/span/text()').extract()
+            print "Item= ", productName, " Price= ", price
+            
+
