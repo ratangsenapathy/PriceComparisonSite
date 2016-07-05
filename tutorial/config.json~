@@ -1,0 +1,4 @@
+[
+	{	
+		"domain" : "foodplus.co.ke",
+		"start_url" : "https://www.foodplus.co.ke/catalogsearch/result/?q=%s"

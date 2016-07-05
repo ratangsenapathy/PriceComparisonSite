@@ -1,0 +1,11 @@
+{	
+	"sites" : [
+			{	
+				"domain" : "foodplus.co.ke",
+				"start_url" : "https://www.foodplus.co.ke/catalogsearch/result/?q=%s",
+				"product_name_selector" : "h2[@class=\"product-name\"]/a/text()",
+				"price_selector" : "div[@class=\"price-box\"]/span/span/text()",
+				"next_page_selector" : "//div[@class = \"pages\"]/ol/li/a/attribute::href"
+			}
+		]
+}

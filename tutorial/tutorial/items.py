@@ -8,7 +8,7 @@
 import scrapy
 
 
-class FoodPlusItem(scrapy.Item):
+class ShoppingItem(scrapy.Item):
     productName = scrapy.Field()
     price       = scrapy.Field()
     
