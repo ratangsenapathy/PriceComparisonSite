@@ -12,7 +12,7 @@ class ShoppingSpider(scrapy.Spider):
         self.siteInfo = siteInfo
         
     def parse(self, response):
-        for sel in response.xpath('//div[@class="name-price"]'):
+        for sel in response.xpath(self.siteInfo["parent_selector"]):
             item = ShoppingItem()
             item['productName'] = sel.xpath(self.siteInfo["product_name_selector"])[0].extract()                   #get product name
             item['price']       = sel.xpath(self.siteInfo["price_selector"])[0].extract()            #get price of product
@@ -20,5 +20,5 @@ class ShoppingSpider(scrapy.Spider):
 
         next_page = response.xpath(self.siteInfo["next_page_selector"])                           #find the link to the next page if available
         if next_page:
-            url = response.urljoin(next_page[0].extract())
+            url = response.urljoin(next_page[int(self.siteInfo["next_page_index"])].extract())
             yield scrapy.Request(url,self.parse)                                                            #redirect to the next page if more products are there
