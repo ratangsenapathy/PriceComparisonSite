@@ -1,6 +1,7 @@
 {	
 	"sites" : [
-			{
+			{       
+				"site_name" : "kilimall",
 				"domain" : "kilimall.co.ke",
 				"start_url" : "http://www.kilimall.co.ke/?act=search&keyword=%s",
 				"parent_selector" : "//div[@class=\"goods-info\"]",
@@ -10,6 +11,7 @@
 				"next_page_index" : "-2"
 			},
 			{	
+				"site_name" : "foodplus",
 				"domain" : "foodplus.co.ke",
 				"start_url" : "https://www.foodplus.co.ke/catalogsearch/result/?q=%s",
 				"parent_selector" : "//div[@class=\"name-price\"]",

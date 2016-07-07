@@ -1,4 +1,22 @@
-[
-	{	
-		"domain" : "foodplus.co.ke",
-		"start_url" : "https://www.foodplus.co.ke/catalogsearch/result/?q=%s"
+{	
+	"sites" : [
+			{
+				"domain" : "kilimall.co.ke",
+				"start_url" : "http://www.kilimall.co.ke/?act=search&keyword=%s",
+				"parent_selector" : "//div[@class=\"goods-info\"]",
+				"product_name_selector" : "h3[@class=\"goods-name\"]/a/text()",
+				"price_selector" : "div[@class=\"goods-price\"]/em/text()",
+				"next_page_selector" : "//div[@class=\"pagination\"]/ul/li/a/attribute::href",
+				"next_page_index" : "-2"
+			},
+			{	
+				"domain" : "foodplus.co.ke",
+				"start_url" : "https://www.foodplus.co.ke/catalogsearch/result/?q=%s",
+				"parent_selector" : "//div[@class=\"name-price\"]",
+				"product_name_selector" : "h2[@class=\"product-name\"]/a/text()",
+				"price_selector" : "div[@class=\"price-box\"]/span/span/text()",
+				"next_page_selector" : "//div[@class = \"pages\"]/ol/li/a/attribute::href",
+				"next_page_index" : "0"
+			}
+		]
+}

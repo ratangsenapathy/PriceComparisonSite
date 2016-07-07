@@ -13,7 +13,7 @@ celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
 
 
-process = CrawlerProcess(get_project_settings())                              #creating a process to call a spider with needed setting
+
 #In settings.py, the JsonWriterPipeline has been activated by commenting out the required lines in settings.py
     
 
@@ -23,8 +23,16 @@ def getConfigData():                     #reads the data from the configuration 
     return data
 
 @celery.task()
-def crawlWebsiteForItem(x,y):
-    return x+y
+def crawlWebsiteForItem(item,siteName):
+    data = getConfigData()
+    siteInfo = None
+    for site in data["sites"]:
+        if site["site_name"] == siteName:
+            siteInfo = site
+            break
+    process = CrawlerProcess(get_project_settings())                              #creating a process to call a spider with needed setting
+    process.crawl('shopper', item,siteInfo)                                     #schedulespider named shopper and search for the item
+    process.start()
 
 @app.route('/test')
 def tester_function():                                   # function to test various new added features during development phase. To be removed in final product
@@ -34,8 +42,10 @@ def tester_function():                                   # function to test vari
     #siteInfo = data["sites"][1]
     #process.crawl('shopper', item = 'bread', siteInfo = siteInfo)
     #process.start()                                                     #start the process. Once the process is done the item searched for and the prices from foodplus.co.ke are stored in items.jl as defined in the item pipeline file called pipelines.py
-    a = crawlWebsiteForItem.delay(4,4)
-    return "wow%s" % a
+    crawlWebsiteForItem.apply_async(args = ["stereo","kilimall"])
+    crawlWebsiteForItem.apply_async(args = ["bread","foodplus"])
+    #return "Value = %s" % a.wait()
+    return "wow"
 
 @app.route('/shop')                                  #rule to test if spider is working
 def hello_world():

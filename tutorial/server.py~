@@ -1,19 +1,49 @@
 from flask import Flask
 from scrapy.crawler import CrawlerProcess
-from scrapy.utils.project import get_project_settings          #this function automatically loads the setting in settings.py function
-
+from scrapy.utils.project import get_project_settings                         #this function automatically loads the setting in settings.py function
+import json
+from celery import Celery
 
 app = Flask(__name__)
-process = CrawlerProcess(get_project_settings())          #creating a process to call a spider with needed setting
+
+app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
+
+
+process = CrawlerProcess(get_project_settings())                              #creating a process to call a spider with needed setting
 #In settings.py, the JsonWriterPipeline has been activated by commenting out the required lines in settings.py
-
-@app.route('/foodplus')                                  #rule to test if spider is working
-def hello_world():
     
-    process.crawl('foodplus', item = 'bread')       #schedulespider named foosplus and search for the item bread
-    process.start()                                 #start the process. Once the process is done the item searched for and the prices from foodplus.co.ke are stored in items.jl as defined in the item pipeline file called pipelines.py
-    return "wow"
 
+def getConfigData():                     #reads the data from the configuration file config.json                    
+    with open('config.json') as dataFile:
+        data = json.load(dataFile)
+    return data
+
+@celery.task()
+def crawlWebsiteForItem(self):
+    return "yosh"
+
+@app.route('/test')
+def tester_function():                                   # function to test various new added features during development phase. To be removed in final product
+    #data = getConfigData()
+    #siteInfo = data["sites"][0]
+    #process.crawl('shopper', item = 'stereo', siteInfo = siteInfo)       #schedulespider named shopper and search for the item
+    #siteInfo = data["sites"][1]
+    #process.crawl('shopper', item = 'bread', siteInfo = siteInfo)
+    #process.start()                                                     #start the process. Once the process is done the item searched for and the prices from foodplus.co.ke are stored in items.jl as defined in the item pipeline file called pipelines.py
+    a = crawlWebsiteForItem.apply_async(4,4)
+    return "wow%s" % a
+
+@app.route('/shop')                                  #rule to test if spider is working
+def hello_world():
+    data = getConfigData()
+    siteInfo = data["sites"][0]
+    process.crawl('shopper', item = 'bread', siteInfo = siteInfo)       #schedulespider named foosplus and search for the item bread
+    process.start()                                                     #start the process. Once the process is done the item searched for and the prices from foodplus.co.ke are stored in items.jl as defined in the item pipeline file called pipelines.py
+    return "wow"
 
 
 if __name__ == '__main__':
